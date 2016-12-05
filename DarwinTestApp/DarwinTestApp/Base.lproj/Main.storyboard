@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set Accessory State" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2FG-oO-8JX">
+                                <rect key="frame" x="223" y="28" width="155" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RnI-bi-iiy">
+                                <rect key="frame" x="236" y="81" width="129" height="30"/>
+                                <state key="normal" title="Release Accessory"/>
+                                <connections>
+                                    <action selector="releaseAccessoryButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EHq-Ty-XN7"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RMB-lH-ry4">
+                                <rect key="frame" x="250" y="133" width="100" height="30"/>
+                                <state key="normal" title="Get Accessory"/>
+                                <connections>
+                                    <action selector="getAccessoryButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3sg-g2-Gpa"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current State: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cn4-9I-h9C">
+                                <rect key="frame" x="244" y="189" width="112" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="RnI-bi-iiy" firstAttribute="top" secondItem="2FG-oO-8JX" secondAttribute="bottom" constant="32" id="38I-nc-rcb"/>
+                            <constraint firstItem="2FG-oO-8JX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="DDa-Z7-j6S"/>
+                            <constraint firstItem="RMB-lH-ry4" firstAttribute="top" secondItem="RnI-bi-iiy" secondAttribute="bottom" constant="22" id="UWz-1j-GNK"/>
+                            <constraint firstItem="RnI-bi-iiy" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="btt-zR-Lbt"/>
+                            <constraint firstItem="RMB-lH-ry4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="j0l-BZ-h0I"/>
+                            <constraint firstItem="Cn4-9I-h9C" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="n7Y-2r-qu4"/>
+                            <constraint firstItem="2FG-oO-8JX" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pfi-z1-fjO"/>
+                            <constraint firstItem="Cn4-9I-h9C" firstAttribute="top" secondItem="RMB-lH-ry4" secondAttribute="bottom" constant="26" id="v31-Xo-1Mx"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="currentStateLabel" destination="Cn4-9I-h9C" id="ZuF-a1-ri1"/>
+                        <outlet property="getAccessoryButton" destination="RMB-lH-ry4" id="INN-wp-ahR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="363" y="357"/>
+        </scene>
+    </scenes>
+</document>

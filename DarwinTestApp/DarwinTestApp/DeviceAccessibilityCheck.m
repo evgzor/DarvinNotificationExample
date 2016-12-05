@@ -1,47 +1,46 @@
 //
-//  AccessoryAccessibilityCheck.m
 //  DarwinTestApp
 //
 //
 
-#import "AccessoryAccessibilityCheck.h"
+#import "DeviceAccessibilityCheck.h"
 @import UIKit;
 
 // Static constants and enumerations
 
 static NSTimeInterval const kTimeOut = 0.05;
 
-static NSString* const kGetAccessoryStatus = @"darwin.get.accessory.status";
-static NSString* const kMsgAccessoryInUse = @"darwin.msg.accessory.in.use";
-static NSString* const kMsgAccessoryWait1 = @"darwin.msg.accessory.wait1";
-static NSString* const KMsgAccessoryReleased = @"darwin.msg.accessory.released";
+static NSString* const kGetDeviceStatus = @"darwin.get.device.status";
+static NSString* const kMsgDeviceInUse = @"darwin.msg.device.in.use";
+static NSString* const kMsgDeviceWait1 = @"darwin.msg.device.wait1";
+static NSString* const KMsgDeviceReleased = @"darwin.msg.device.released";
 // Message to handle termination of application in "Wait" state
 static NSString* const kMsgApplicationInWaitStateTerminated = @"darwin.msg.waiting.application.terminated";
 
-static NSUInteger accessoryStatus;
+static NSUInteger deviceStatus;
 
-// Application States (based on accessory state) enum
+// Application States (based on device state) enum
 typedef enum : NSUInteger {
     NEW = 0,
     PENDING,
-    USING_ACCESSORY,
+    USING,
     WAIT,
     BUSY,
     INACTIVE,
     INVALID
 } ApplicationStates;
 
-@interface AccessoryAccessibilityCheck()
+@interface DeviceAccessibilityCheck()
 
 @property (readwrite) NSUInteger currentApplicationState;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic) BOOL isTimerStopped;
 @property (nonatomic, strong) NSMutableSet *receivedNotifications;
-@property (nonatomic, copy) AccessoryCallback callback;
+@property (nonatomic, copy) DeviceCallback callback;
 
 @end
 
-@implementation AccessoryAccessibilityCheck
+@implementation DeviceAccessibilityCheck
 
 #pragma mark - Initialization
 
@@ -54,7 +53,7 @@ typedef enum : NSUInteger {
         _isTimerStopped = NO;
         _receivedNotifications = [[NSMutableSet alloc] init];
         
-        // Subsribe for notifications, request accessory status and start listening for reply
+        // Subsribe for notifications, request device status and start listening for reply
         [self registerNotificationReceiver];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(terminationHandler) name:UIApplicationWillTerminateNotification object:nil];
@@ -69,7 +68,7 @@ typedef enum : NSUInteger {
 - (void)timerDidFire {
     // There are no messages received, stop timer and go on
     [self stopTimer];
-    [self updateAccessoryState];
+    [self updateDeviceState];
 }
 
 - (void)stopTimer {
@@ -80,43 +79,43 @@ typedef enum : NSUInteger {
 #pragma mark - Termination Handler
 - (void)terminationHandler {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self unregisterAccessoryCheck];
+    [self unregisterDeviceCheck];
 }
 
 #pragma mark - Foreground Switch handler
 - (void)foregroundSwitchHandler {
     if (self.currentApplicationState == BUSY) {
-        [self updateAccessoryState];
+        [self updateDeviceState];
     }
 }
 
-#pragma mark - Update Accessory State method
-- (void)updateAccessoryState {
+#pragma mark - Update Device State method
+- (void)updateDeviceState {
     switch (self.currentApplicationState) {
         case PENDING:
         {
             NSLog(@"Current State: PENDING");
-            if ([self.receivedNotifications containsObject:kMsgAccessoryInUse] && [self.receivedNotifications containsObject:kMsgAccessoryWait1] && self.isTimerStopped) {
+            if ([self.receivedNotifications containsObject:kMsgDeviceInUse] && [self.receivedNotifications containsObject:kMsgDeviceWait1] && self.isTimerStopped) {
                 self.currentApplicationState = BUSY;
                 NSLog(@"State changed to: BUSY");
-            } else if ([self.receivedNotifications containsObject:kMsgAccessoryInUse] && self.isTimerStopped) {
+            } else if ([self.receivedNotifications containsObject:kMsgDeviceInUse] && self.isTimerStopped) {
                 self.currentApplicationState = WAIT;
                 NSLog(@"State changed to: WAIT");
-                [self sendEventWithIdentifier:kMsgAccessoryWait1];
+                [self sendEventWithIdentifier:kMsgDeviceWait1];
             } else if (self.isTimerStopped) {
-                self.currentApplicationState = USING_ACCESSORY;
-                NSLog(@"State changed to: USING_ACCESSORY");
-                [self sendEventWithIdentifier:kMsgAccessoryInUse];
+                self.currentApplicationState = USING;
+                NSLog(@"State changed to: USING");
+                [self sendEventWithIdentifier:kMsgDeviceInUse];
             } else {
                 self.currentApplicationState = INVALID;
                 NSLog(@"State changed to: INVALID");
             }
         }
             break;
-        case USING_ACCESSORY:
+        case USING:
         {
-            NSLog(@"Current State: USING_ACCESSORY");
-            if (accessoryStatus == ACCESSORY_FREE) {
+            NSLog(@"Current State: USING");
+            if (deviceStatus == DEVICE_FREE) {
                 self.currentApplicationState = INACTIVE;
                 NSLog(@"State changed to: INACTIVE");
             }
@@ -125,20 +124,20 @@ typedef enum : NSUInteger {
         case WAIT:
         {
             NSLog(@"Current State: WAIT");
-            if (accessoryStatus == ACCESSORY_FREE) {
-                self.currentApplicationState = USING_ACCESSORY;
-                NSLog(@"State changed to: USING_ACCESSORY");
-                [self sendEventWithIdentifier:kMsgAccessoryInUse];
+            if (deviceStatus == DEVICE_FREE) {
+                self.currentApplicationState = USING;
+                NSLog(@"State changed to: USING");
+                [self sendEventWithIdentifier:kMsgDeviceInUse];
             }
         }
             break;
         case BUSY:
         {
             NSLog(@"Current State: BUSY");
-            if (![self.receivedNotifications containsObject:kMsgAccessoryWait1]) {
-                if ([self.receivedNotifications containsObject:kMsgApplicationInWaitStateTerminated] || [self.receivedNotifications containsObject:kMsgAccessoryInUse]) {
+            if (![self.receivedNotifications containsObject:kMsgDeviceWait1]) {
+                if ([self.receivedNotifications containsObject:kMsgApplicationInWaitStateTerminated] || [self.receivedNotifications containsObject:kMsgDeviceInUse]) {
                     self.currentApplicationState = WAIT;
-                    [self sendEventWithIdentifier:kMsgAccessoryWait1];
+                    [self sendEventWithIdentifier:kMsgDeviceWait1];
                     NSLog(@"State changed to: WAIT");
                 }
             }
@@ -156,7 +155,7 @@ typedef enum : NSUInteger {
     }
     
     if (self.callback) {
-        self.callback(accessoryStatus);
+        self.callback(deviceStatus);
     }
     
     [self.receivedNotifications removeAllObjects];
@@ -167,7 +166,7 @@ typedef enum : NSUInteger {
 - (void)sendEventWithIdentifier:(NSString *)eventIdentifier {
     NSLog(@"Sending Notification: %@", eventIdentifier);
     
-    if ([eventIdentifier isEqualToString:kGetAccessoryStatus] && self.currentApplicationState == NEW) {
+    if ([eventIdentifier isEqualToString:kGetDeviceStatus] && self.currentApplicationState == NEW) {
         UIApplicationState currentState = [[UIApplication sharedApplication] applicationState];
         if (currentState != UIApplicationStateBackground) {
             self.currentApplicationState = PENDING;
@@ -181,17 +180,17 @@ typedef enum : NSUInteger {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), event, NULL, NULL, true);
 }
 
-- (void)updateAccessoryStatusWithReceivedIdentifier:(NSString *)identifier {
-    if ([identifier isEqualToString:kMsgAccessoryInUse]) {
-        accessoryStatus = ACCESSORY_WAIT;
-    } else if ([identifier isEqualToString:kMsgAccessoryWait1]) {
-        accessoryStatus = ACCESSORY_BUSY;
-    } else if ([identifier isEqualToString:KMsgAccessoryReleased]) {
-        accessoryStatus = ACCESSORY_FREE;
-    } else if ([identifier isEqualToString:kGetAccessoryStatus]) {
+- (void)updateDeviceStatusWithReceivedIdentifier:(NSString *)identifier {
+    if ([identifier isEqualToString:kMsgDeviceInUse]) {
+        deviceStatus = DEVICE_WAIT;
+    } else if ([identifier isEqualToString:kMsgDeviceWait1]) {
+        deviceStatus = DEVICE_BUSY;
+    } else if ([identifier isEqualToString:KMsgDeviceReleased]) {
+        deviceStatus = DEVICE_FREE;
+    } else if ([identifier isEqualToString:kGetDeviceStatus]) {
         UIApplicationState currentState = [[UIApplication sharedApplication] applicationState];
         if (currentState == UIApplicationStateBackground) {
-            accessoryStatus = APP_IN_BACKGROUND;
+            deviceStatus = APPLICATION_IN_BACKGROUND;
         }
     }
 }
@@ -199,10 +198,10 @@ typedef enum : NSUInteger {
 #pragma mark - Subscribe for Darwin Notifications
 
 - (void)registerNotificationReceiver {
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)kGetAccessoryStatus, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)kMsgAccessoryInUse, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)kMsgAccessoryWait1, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)KMsgAccessoryReleased, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)kGetDeviceStatus, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)kMsgDeviceInUse, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)kMsgDeviceWait1, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)KMsgDeviceReleased, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), notificationReceivedCallback, (__bridge CFStringRef)kMsgApplicationInWaitStateTerminated, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     
     // Add background task to prevent app from going to "sleep" mode
@@ -220,18 +219,18 @@ static void notificationReceivedCallback(CFNotificationCenterRef center, void *o
     NSString *notificationReceived = (__bridge NSString*)name;
     NSLog(@"Notification Received: %@", notificationReceived);
     
-    AccessoryAccessibilityCheck *weakself = (__bridge AccessoryAccessibilityCheck*)observer;
+    DeviceAccessibilityCheck *weakself = (__bridge DeviceAccessibilityCheck*)observer;
 
-    [weakself updateAccessoryStatusWithReceivedIdentifier:notificationReceived];
+    [weakself updateDeviceStatusWithReceivedIdentifier:notificationReceived];
     
-    if ([notificationReceived isEqualToString:kGetAccessoryStatus]) {
-        // Depending on current accessory state send or do not send reply notifications
+    if ([notificationReceived isEqualToString:kGetDeviceStatus]) {
+        // Depending on current device state send or do not send reply notifications
         switch (weakself.currentApplicationState) {
-            case USING_ACCESSORY:
-                [weakself sendEventWithIdentifier:kMsgAccessoryInUse];
+            case USING:
+                [weakself sendEventWithIdentifier:kMsgDeviceInUse];
                 break;
             case WAIT:
-                [weakself sendEventWithIdentifier:kMsgAccessoryWait1];
+                [weakself sendEventWithIdentifier:kMsgDeviceWait1];
                 break;
             default:
                 break;
@@ -240,29 +239,29 @@ static void notificationReceivedCallback(CFNotificationCenterRef center, void *o
         [weakself.receivedNotifications addObject:notificationReceived];
     }
     
-    if ([notificationReceived isEqualToString:KMsgAccessoryReleased]) {
-        [weakself updateAccessoryState];
+    if ([notificationReceived isEqualToString:KMsgDeviceReleased]) {
+        [weakself updateDeviceState];
     }
 }
 
 #pragma mark - app API's methods
 
-// Check accessory state with callback
-- (void)checkAccessoryUseFlag:(AccessoryCallback)accessoryAvailabilityCallback {
-    if (accessoryAvailabilityCallback) {
+// Check device state with callback
+- (void)checkDeviceUseFlag:(DeviceCallback)deviceAvailabilityCallback {
+    if (deviceAvailabilityCallback) {
         if (self.currentApplicationState == INACTIVE) {
             self.currentApplicationState = NEW;
         }
-        [self sendEventWithIdentifier:kGetAccessoryStatus];
+        [self sendEventWithIdentifier:kGetDeviceStatus];
         self.timer = [NSTimer scheduledTimerWithTimeInterval:kTimeOut target:self selector:@selector(timerDidFire) userInfo:nil repeats:YES];
-        self.callback = accessoryAvailabilityCallback;
+        self.callback = deviceAvailabilityCallback;
     }
 }
 
-// Unregister accessory check
-- (void)unregisterAccessoryCheck {
-    if (self.currentApplicationState == USING_ACCESSORY) {
-        [self sendEventWithIdentifier:KMsgAccessoryReleased];
+// Unregister device check
+- (void)unregisterDeviceCheck {
+    if (self.currentApplicationState == USING) {
+        [self sendEventWithIdentifier:KMsgDeviceReleased];
     } else if (self.currentApplicationState == WAIT) {
         [self sendEventWithIdentifier:kMsgApplicationInWaitStateTerminated];
     }

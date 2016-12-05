@@ -17,24 +17,24 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set Accessory State" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2FG-oO-8JX">
-                                <rect key="frame" x="223" y="28" width="155" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set Device State" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2FG-oO-8JX">
+                                <rect key="frame" x="237" y="28" width="127" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RnI-bi-iiy">
-                                <rect key="frame" x="236" y="81" width="129" height="30"/>
-                                <state key="normal" title="Release Accessory"/>
+                                <rect key="frame" x="248" y="81" width="105" height="30"/>
+                                <state key="normal" title="Release Device"/>
                                 <connections>
-                                    <action selector="releaseAccessoryButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EHq-Ty-XN7"/>
+                                    <action selector="releaseDeviceButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4ce-UW-K5B"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RMB-lH-ry4">
-                                <rect key="frame" x="250" y="133" width="100" height="30"/>
-                                <state key="normal" title="Get Accessory"/>
+                                <rect key="frame" x="262" y="133" width="76" height="30"/>
+                                <state key="normal" title="Get Device"/>
                                 <connections>
-                                    <action selector="getAccessoryButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3sg-g2-Gpa"/>
+                                    <action selector="getDeviceButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Cey-y8-5op"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current State: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cn4-9I-h9C">
@@ -58,7 +58,7 @@
                     </view>
                     <connections>
                         <outlet property="currentStateLabel" destination="Cn4-9I-h9C" id="ZuF-a1-ri1"/>
-                        <outlet property="getAccessoryButton" destination="RMB-lH-ry4" id="INN-wp-ahR"/>
+                        <outlet property="getDeviceButton" destination="RMB-lH-ry4" id="V8z-Qn-Cre"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

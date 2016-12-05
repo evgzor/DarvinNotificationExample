@@ -13,7 +13,7 @@
 		A495B39E1C5A4395009B233D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A495B39C1C5A4395009B233D /* Main.storyboard */; };
 		A495B3A01C5A4395009B233D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A495B39F1C5A4395009B233D /* Assets.xcassets */; };
 		A495B3A31C5A4395009B233D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A495B3A11C5A4395009B233D /* LaunchScreen.storyboard */; };
-		A495B3AC1C5A4413009B233D /* AccessoryAccessibilityCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = A495B3AB1C5A4413009B233D /* AccessoryAccessibilityCheck.m */; };
+		A495B3AC1C5A4413009B233D /* DeviceAccessibilityCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = A495B3AB1C5A4413009B233D /* DeviceAccessibilityCheck.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,8 +27,8 @@
 		A495B39F1C5A4395009B233D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A495B3A21C5A4395009B233D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A495B3A41C5A4395009B233D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A495B3AA1C5A4413009B233D /* AccessoryAccessibilityCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccessoryAccessibilityCheck.h; sourceTree = "<group>"; };
-		A495B3AB1C5A4413009B233D /* AccessoryAccessibilityCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessoryAccessibilityCheck.m; sourceTree = "<group>"; };
+		A495B3AA1C5A4413009B233D /* DeviceAccessibilityCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceAccessibilityCheck.h; sourceTree = "<group>"; };
+		A495B3AB1C5A4413009B233D /* DeviceAccessibilityCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceAccessibilityCheck.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,8 +65,8 @@
 				A495B3971C5A4395009B233D /* AppDelegate.m */,
 				A495B3991C5A4395009B233D /* ViewController.h */,
 				A495B39A1C5A4395009B233D /* ViewController.m */,
-				A495B3AA1C5A4413009B233D /* AccessoryAccessibilityCheck.h */,
-				A495B3AB1C5A4413009B233D /* AccessoryAccessibilityCheck.m */,
+				A495B3AA1C5A4413009B233D /* DeviceAccessibilityCheck.h */,
+				A495B3AB1C5A4413009B233D /* DeviceAccessibilityCheck.m */,
 				A495B39C1C5A4395009B233D /* Main.storyboard */,
 				A495B39F1C5A4395009B233D /* Assets.xcassets */,
 				A495B3A11C5A4395009B233D /* LaunchScreen.storyboard */,
@@ -161,7 +161,7 @@
 			files = (
 				A495B39B1C5A4395009B233D /* ViewController.m in Sources */,
 				A495B3981C5A4395009B233D /* AppDelegate.m in Sources */,
-				A495B3AC1C5A4413009B233D /* AccessoryAccessibilityCheck.m in Sources */,
+				A495B3AC1C5A4413009B233D /* DeviceAccessibilityCheck.m in Sources */,
 				A495B3951C5A4395009B233D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
